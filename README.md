@@ -16,7 +16,7 @@ Install-Package Microsoft.AspNetCore.OutputCaching.StackExchangeRedis -Version 8
 `appsettings.json` ფაილში გავწეროთ რედისის მისამართი
  
 ```
-	"RedisCacheUrl": "127.0.0.1:6379"
+"RedisCacheUrl": "127.0.0.1:6379"
 ```
 
 `Program.cs`-ში DI კონტეინერში დავარეგისტრიროთ რედისის ქეში და განვსაზღვროთ ქეშირების პოლისი
