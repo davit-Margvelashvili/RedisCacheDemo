@@ -1,4 +1,4 @@
-var builder = WebApplication.CreateBuilder(args);
+﻿var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
@@ -6,8 +6,11 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddStackExchangeRedisOutputCache(options => { options.Configuration = builder.Configuration["RedisCacheUrl"]; });
 
+// რედისის დაკონფიგურირება
+builder.Services.AddStackExchangeRedisOutputCache(options => options.Configuration = builder.Configuration["RedisCacheUrl"]);
+
+// პოლისის განსაზღვრა.
 builder.Services.AddOutputCache(options =>
 {
     options.AddBasePolicy(builder =>
@@ -25,10 +28,10 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+// Middleware-ი უნდა იყოს UseHttpsRedirection-ის შემდეგ და UseAuthorization ან/და MapControllers-Middleware-ებს შორის
 app.UseOutputCache();
 
 app.UseAuthorization();
-
 app.MapControllers();
 
 app.Run();
