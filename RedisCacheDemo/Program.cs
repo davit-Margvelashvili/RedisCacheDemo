@@ -1,4 +1,8 @@
-﻿var builder = WebApplication.CreateBuilder(args);
+﻿using RedisCacheDemo.Services.Abstractions;
+using RedisCacheDemo.Services.Implementations;
+using RedisCacheDemo.Utils;
+
+var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
@@ -7,14 +11,23 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddSingleton<ICustomerRepository, InMemoryCustomerRepository>();
+builder.Services.AddSingleton<ICountryRepository, InMemoryCountryRepository>();
+builder.Services.AddSingleton<IBalanceService, InMemoryBalanceService>();
+
 // რედისის დაკონფიგურირება
 builder.Services.AddStackExchangeRedisOutputCache(options => options.Configuration = builder.Configuration["RedisCacheUrl"]);
 
 // პოლისის განსაზღვრა.
 builder.Services.AddOutputCache(options =>
 {
-    options.AddBasePolicy(builder =>
-        builder.Expire(TimeSpan.FromSeconds(10)));
+    // Default policy
+    options.AddBasePolicy(policyBuilder => policyBuilder.Expire(TimeSpan.FromSeconds(20)));
+
+    // Named policies
+    options.AddPolicy(Constants.ShortTimeCache, policyBuilder => policyBuilder.Expire(TimeSpan.FromSeconds(5)));
+    options.AddPolicy(Constants.LongTimeCache, policyBuilder => policyBuilder.Expire(TimeSpan.FromMinutes(30)));
+    options.AddPolicy(Constants.NoCache, policyBuilder => policyBuilder.NoCache());
 });
 
 var app = builder.Build();
