@@ -6,6 +6,7 @@ using RedisCacheDemo.Utils;
 
 namespace RedisCacheDemo.Controllers;
 
+[ApiController]
 [Route("customers")]
 public class CustomersController : ControllerBase
 {
@@ -17,7 +18,7 @@ public class CustomersController : ControllerBase
     }
 
     [HttpPost("add")]
-    public void AddCustomer(Customer customer)
+    public void AddCustomer(CreateCustomerRequest customer)
     {
         _customerRepository.AddCustomer(customer);
     }
@@ -29,7 +30,7 @@ public class CustomersController : ControllerBase
         return _customerRepository.GetCustomerById(customerId);
     }
 
-    [HttpPost("update")]
+    [HttpPut("update")]
     public void UpdateCustomer(Customer updatedCustomer)
     {
         _customerRepository.UpdateCustomer(updatedCustomer);

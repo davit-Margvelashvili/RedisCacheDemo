@@ -4,7 +4,7 @@ namespace RedisCacheDemo.Services.Abstractions;
 
 public interface ICustomerRepository
 {
-    void AddCustomer(Customer customer);
+    void AddCustomer(CreateCustomerRequest customer);
 
     Customer? GetCustomerById(int customerId);
 

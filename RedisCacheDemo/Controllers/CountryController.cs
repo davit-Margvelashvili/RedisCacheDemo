@@ -6,6 +6,7 @@ using RedisCacheDemo.Utils;
 
 namespace RedisCacheDemo.Controllers;
 
+[ApiController]
 [Route("countries")]
 [OutputCache(PolicyName = Constants.LongTimeCache)]
 public class CountryController : ControllerBase

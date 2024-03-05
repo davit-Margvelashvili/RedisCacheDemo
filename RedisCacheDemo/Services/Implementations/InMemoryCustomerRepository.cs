@@ -13,15 +13,22 @@ public class InMemoryCustomerRepository : ICustomerRepository
         _customers = new List<Customer>();
         _nextCustomerId = 1; // Initial CustomerId
 
-        AddCustomer(new Customer { Name = "John Doe", Email = "john@example.com", RegistrationDate = DateTime.Now });
-        AddCustomer(new Customer { Name = "Jane Smith", Email = "jane@example.com", RegistrationDate = DateTime.Now });
+        AddCustomer(new CreateCustomerRequest { Name = "John Doe", Email = "john@example.com" });
+        AddCustomer(new CreateCustomerRequest { Name = "Jane Smith", Email = "jane@example.com" });
     }
 
     // Create operation
-    public void AddCustomer(Customer customer)
+    public void AddCustomer(CreateCustomerRequest customer)
     {
-        customer.CustomerId = _nextCustomerId++;
-        _customers.Add(customer);
+        var newCustomer = new Customer
+        {
+            CustomerId = _nextCustomerId++,
+            Name = customer.Name,
+            Email = customer.Email,
+            RegistrationDate = DateTime.Now
+        };
+
+        _customers.Add(newCustomer);
     }
 
     // Read operation

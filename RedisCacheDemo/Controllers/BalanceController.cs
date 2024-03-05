@@ -6,6 +6,7 @@ using RedisCacheDemo.Utils;
 
 namespace RedisCacheDemo.Controllers;
 
+[ApiController]
 [Route("Balance")]
 [OutputCache(PolicyName = Constants.NoCache)]
 public class BalanceController : ControllerBase
