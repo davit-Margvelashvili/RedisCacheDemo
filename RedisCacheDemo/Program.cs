@@ -2,6 +2,7 @@
 using RedisCacheDemo.Services.Abstractions;
 using RedisCacheDemo.Services.Implementations;
 using RedisCacheDemo.Utils;
+using StackExchange.Redis;
 using Swashbuckle.AspNetCore.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,7 +24,19 @@ builder.Services.AddSingleton<ICountryRepository, InMemoryCountryRepository>();
 builder.Services.AddSingleton<IBalanceService, InMemoryBalanceService>();
 
 // რედისის დაკონფიგურირება
-builder.Services.AddStackExchangeRedisOutputCache(options => options.Configuration = builder.Configuration["RedisCacheUrl"]);
+builder.Services.AddStackExchangeRedisOutputCache(options =>
+{
+    //// მარტივი კონფიგურაცია connection string-ის გამოყენებით
+    //options.Configuration = builder.Configuration["RedisCacheUrl"];
+
+    // კომპლექსური კონფიგურაცია
+    options.ConfigurationOptions = new ConfigurationOptions
+    {
+        EndPoints = { builder.Configuration["RedisCacheUrl"] },
+        ConnectTimeout = 100,
+        SyncTimeout = 100
+    };
+});
 
 // პოლისის განსაზღვრა.
 builder.Services.AddOutputCache(options =>
